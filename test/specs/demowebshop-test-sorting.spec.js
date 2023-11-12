@@ -6,18 +6,21 @@ describe("Test suite", () => {
         browser.pause(6000);
         await bookMenu.click();
         const booksPage = await $('.page-title > h1:nth-child(1)');
-        console.log(booksPage);
-        const bookPageExist = await booksPage.isExisting();
-
         const sortByOption = $('#products-orderby');
-        await sortByOption.selectByIndex(2);
-        const productNames = $$('.product-item .product-title');
-        const isSortedName = verifySortingOrder(productNames);
+        await sortByOption.selectByIndex(1);
 
-        function verifySortingOrder(productNames) {
-            for (let i = 0; i < productNames.length - 1; i++) {
-                const currentName = productNames[i].getText().toLowerCase();
-                const nextName = productNames[i + 1].getText().toLowerCase();
+        const productNames = $$('.product-item .product-title a');
+        const productListNames = await productNames.map((items) => {
+
+            return items.getText();
+        })
+
+        const isSortedName = verifySortingOrder(productListNames);
+
+        function verifySortingOrder(productListNames) {
+            for (let i = 0; i < productListNames.length - 1; i++) {
+                const currentName = productListNames[i].toLowerCase();
+                const nextName = productListNames[i + 1].toLowerCase();
 
                 if (currentName.localeCompare(nextName) > 0) {
                     return false;
@@ -36,20 +39,21 @@ describe("Test suite", () => {
         browser.pause(6000);
         await bookMenu.click();
         const booksPage = await $('.page-title > h1:nth-child(1)');
-        console.log(booksPage);
-        const bookPageExist = await booksPage.isExisting();
 
         const sortByOption = $('#products-orderby');
-        await sortByOption.selectByIndex(4);
-        console.log(await sortByOption.getValue());
-        
-        const productPrices = $$('.product-item .price');
-        const isSortedPrice = checkSortingOrderByPrice(productPrices);
+        await sortByOption.selectByIndex(3);
+
+        const productPrices = $$('.product-item .actual-price');
+        const productPriceValue = await productPrices.map((item) => {
+            return item.getText();
+        })
+
+        const isSortedPrice = checkSortingOrderByPrice(productPriceValue);
 
         function checkSortingOrderByPrice(productPrices) {
             for (let i = 0; i < productPrices.length - 1; i++) {
-                const currentPrice = parseFloat(productPrices[i].getText().replace('$', ''));
-                const nextPrice = parseFloat(productPrices[i + 1].getText().replace('$', ''));
+                const currentPrice = parseFloat(productPrices[i]);
+                const nextPrice = parseFloat(productPrices[i + 1]);
 
                 if (currentPrice > nextPrice) {
                     return false;
