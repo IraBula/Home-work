@@ -53,11 +53,13 @@ exports.config = {
     capabilities: [{
         maxInstances: 10,
         browserName: 'chrome',
+        timeouts: { implicit: 60000 },
         acceptInsecureCerts: true
     },
     {
         maxInstances: 10,
         browserName: 'firefox',
+        timeouts: { pageLoad: 60000 },
         acceptInsecureCerts: true
     }
     ],
@@ -118,6 +120,9 @@ exports.config = {
     // Make sure you have the wdio adapter package for the specific framework installed
     // before running any tests.
     framework: 'mocha',
+    mochaOpts: {
+        timeout: 20000
+    },
     
     //
     // The number of times to retry the entire specfile when it fails as a whole
